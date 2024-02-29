@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'post',
     'activity',
     'log',
+    'direct',
 ]
 
 MIDDLEWARE = [
