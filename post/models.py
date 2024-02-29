@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
-from django.core.exceptions import ValidationError
+from activity.models import Comment
 # Create your models here.
 
 User = get_user_model()
@@ -26,7 +26,7 @@ class Tag(models.Model):
         return super().save(*args, **kwargs)
 
 
-class Post(models.Model):
+class InstaPost(models.Model):
     MEDIA_CHOICES = (
         (1, '1 media'),
         (10, 'Up to 10 media')
@@ -53,20 +53,8 @@ class Post(models.Model):
         return self.title
 
 
-class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(Post, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        if len(self.content) > 100:
-            return f'{self.content[:100]} ...'
-        return self.content
-
-
 class Media(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='media')
+    post = models.ForeignKey(InstaPost, on_delete=models.CASCADE, related_name='media')
     media = models.FileField(upload_to=user_directory_path, verbose_name='Image or Video')
 
     def save(self, *args, **kwargs):
@@ -74,19 +62,6 @@ class Media(models.Model):
         if self.post.media.count() >= self.post.media_choice:
             raise ValueError("Maximum media count reached for this post.")
         super().save(*args, **kwargs)
-
-
-class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-
-    def __str__(self):
-        return f'{self.user.username} liked {self.post}'
-
-    def clean(self):
-        already_liked = Like.objects.filter(post=self.post, user=self.user).exists()
-        if already_liked:
-            raise ValidationError(f'{self.user} have already liked {self.post}')
 
 
 class Story(models.Model):
@@ -105,9 +80,9 @@ class Story(models.Model):
 
 
 class Mention(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    mentioned_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mentions')
+    mentioned_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mentioned')
+    post = models.ForeignKey(InstaPost, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

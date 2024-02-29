@@ -1,13 +1,8 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth import get_user_model
-
-from post.models import Post
 
 # Create your models here.
-
-User = get_user_model()
 
 
 def user_directory_path(instance, filename):
@@ -30,7 +25,7 @@ class CustomUser(AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, related_name='profile', on_delete=models.CASCADE)
     ph_number = models.IntegerField('Phone Number', blank=True, null=True, unique=True, validators=[
         RegexValidator(
             regex='09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
@@ -52,11 +47,11 @@ class Profile(models.Model):
                                     blank=True,
                                     default='PERSONAL',
                                     choices=[('BUSINESS', 'Business'), ('PERSONAL', 'Personal')])
-    followers = models.ManyToManyField(User,
+    followers = models.ManyToManyField(CustomUser,
                                        related_name='Follower',
                                        blank=True,
                                        symmetrical=False)
-    following = models.ManyToManyField(User,
+    following = models.ManyToManyField(CustomUser,
                                        related_name='Following',
                                        blank=True,
                                        symmetrical=False)
@@ -87,4 +82,5 @@ class Profile(models.Model):
 
     def posts(self):
         """ Get all the posts """
-        return Post.objects.filter(user__id=self.pk)
+        from post.models import InstaPost
+        return InstaPost.objects.filter(user__id=self.pk)
