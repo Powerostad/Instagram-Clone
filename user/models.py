@@ -19,7 +19,7 @@ class CustomUser(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, related_name='profile', on_delete=models.CASCADE)
-    ph_number = models.IntegerField('Phone Number', blank=True, null=True, unique=True, validators=[
+    phone_number = models.IntegerField('Phone Number', blank=True, null=True, unique=True, validators=[
         RegexValidator(
             regex='09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
             message='Enter a valid registration number in the format 09xxxxxxxxx.',
