@@ -6,19 +6,12 @@ from django.contrib.auth.models import AbstractUser
 
 
 def user_directory_path(instance, filename):
-    return 'ProfilePic_{0}/{1}'.format(instance.user.id, filename)
+    return f'ProfilePic_{instance.user.id}/{filename}'
 
 
 class CustomUser(AbstractUser):
     full_name = models.CharField('Full Name', max_length=30)
-    username = models.CharField('Username', max_length=30, unique=True)
     email = models.EmailField('Email', max_length=50, unique=True)
-    is_active = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'full_name']
 
     def __str__(self):
         return self.username
