@@ -21,7 +21,7 @@ class Profile(models.Model):
     user = models.OneToOneField(CustomUser, related_name='profile', on_delete=models.CASCADE)
     phone_number = models.IntegerField('Phone Number', blank=True, null=True, unique=True, validators=[
         RegexValidator(
-            regex='09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}',
+            regex='(0|\+98)?([ ]|-|[()]){0,2}9[1|2|3|4]([ ]|-|[()]){0,2}(?:[0-9]([ ]|-|[()]){0,2}){8}',
             message='Enter a valid registration number in the format 09xxxxxxxxx.',
             code="invalid_registration",
         )
@@ -69,11 +69,10 @@ class Profile(models.Model):
 
     def post_count(self):
         """ No of posts """
-        if self.user_post.count():
+        if self.user.user_post.count():
             return self.user_post.count()
         return 0
 
     def posts(self):
         """ Get all the posts """
-        from post.models import InstaPost
-        return InstaPost.objects.filter(user__id=self.pk)
+        return 'post.InstaPost'.objects.filter(user__id=self.pk)

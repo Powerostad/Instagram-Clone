@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 def direct_message_directory_path(instance, filename):
-    return f'direct_{instance.sender.id}/{instance.receiver.id}'
+    return f'direct_{instance.sender.id}/{instance.receiver.id}/{filename}'
 
 
 class DirectMessage(models.Model):

@@ -1,8 +1,11 @@
 import uuid
+
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
-from activity.models import Comment
+from activity.models import Comment, Like
+
 # Create your models here.
 
 User = get_user_model()
@@ -39,6 +42,7 @@ class InstaPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+    likes = GenericRelation(Like, related_query_name='post')
 
     def likes_count(self):
         if self.likes.count():
@@ -69,6 +73,8 @@ class Story(models.Model):
     media = models.FileField(upload_to=user_directory_path, verbose_name='Image or Video')
     context = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    likes = GenericRelation(Like, related_query_name='story')
 
     def __str__(self):
         return f"{self.user.username} story"
