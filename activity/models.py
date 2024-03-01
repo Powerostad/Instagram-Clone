@@ -22,10 +22,8 @@ class Like(models.Model):
     def __str__(self):
         return f'{self.user.username} liked {self.post}'
 
-    def clean(self):
-        already_liked = Like.objects.filter(post=self.post, user=self.user).exists()
-        if already_liked:
-            raise ValidationError(f'{self.user} have already liked {self.post}')
+    class Meta:
+        unique_together = ['user', 'content_type', 'object_id']
 
 
 class Comment(models.Model):
