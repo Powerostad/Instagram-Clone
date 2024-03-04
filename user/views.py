@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
+from log.models import ProfileViewLog
 from .models import Profile
 from .serializers import ProfileSerializer, CreateUserSerializer, FollowSerializer
 from django.contrib.auth import (get_user_model,
@@ -70,6 +71,8 @@ class ProfileViewAPI(RetrieveAPIView):
 
     def get_object(self):
         username = self.kwargs["username"]
+        profile = Profile.objects.filter(user__username=username).first()
+        ProfileViewLog.objects.create(user=self.request.user, profile=profile)
         return get_object_or_404(User, username=username)
 
 

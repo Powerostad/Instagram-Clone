@@ -34,7 +34,6 @@ class InstaPost(models.Model):
         (1, '1 media'),
         (10, 'Up to 10 media')
     )
-    title = models.CharField(max_length=100,)
     caption = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_post')
     tags = models.ManyToManyField(Tag, related_name='tags')
@@ -54,7 +53,7 @@ class InstaPost(models.Model):
         verbose_name_plural = 'Posts'
 
     def __str__(self):
-        return self.title
+        return self.caption
 
 
 class Media(models.Model):

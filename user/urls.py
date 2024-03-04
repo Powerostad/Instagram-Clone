@@ -7,5 +7,5 @@ urlpatterns = [
     # path('logout/', LogoutUserAPI.as_view(), name='logout'),
     path('follow/', FollowAPI.as_view(), name='follow'),
     path('profile/<str:username>/update/', UpdateProfileAPI.as_view(), name='update_profile'),
-    path('profile/<str:username>/', ProfileViewAPI.as_view(), name='follow'),
+    path('profile/<str:username>/', ProfileViewAPI.as_view(), name='profile_view'),
 ]

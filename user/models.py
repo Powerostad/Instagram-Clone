@@ -55,12 +55,14 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} profile'
 
+    @property
     def followers_count(self):
         """ No of followers """
         if self.followers.count():
             return self.followers.count()
         return 0
 
+    @property
     def following_count(self):
         """ No of following """
         if self.following.count():
@@ -70,7 +72,7 @@ class Profile(models.Model):
     def post_count(self):
         """ No of posts """
         if self.user.user_post.count():
-            return self.user_post.count()
+            return self.user.user_post.count()
         return 0
 
     def posts(self):

@@ -7,7 +7,6 @@ from .models import InstaPost, Media, Mention, Story, Tag
 class InstaPostAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'title',
         'user',
         'get_tags',
         'media_choice',
@@ -21,7 +20,7 @@ class InstaPostAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         'id',
-        'title',
+        'user',
     )
     list_filter = (
         'tags',
@@ -31,7 +30,6 @@ class InstaPostAdmin(admin.ModelAdmin):
         'media_choice',
     )
     search_fields = (
-        'title',
         'caption',
         'tags',
     )
