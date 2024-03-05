@@ -32,7 +32,7 @@ class DirectMessage(models.Model):
         elif self.content_type != 'text' and self.text_content:
             raise ValidationError("You can't send text when selecting other types!")
         elif self.content_type == 'text' and self.content:
-            raise ValidationError("You can't send non-text type content!")
+            raise ValidationError("You can't send non-text type content on text type!")
 
     def save(self, *args, **kwargs):
         self.full_clean()
