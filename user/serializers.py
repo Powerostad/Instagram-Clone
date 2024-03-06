@@ -39,9 +39,6 @@ class MiniUserSerializer(serializers.ModelSerializer):
         fields = ['pk', 'username', 'full_name']
 
 
-
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     followers = MiniUserSerializer(many=True, source='profile.followers', read_only=True)
     following = MiniUserSerializer(many=True, source='profile.following', read_only=True)

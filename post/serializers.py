@@ -1,8 +1,16 @@
+from django.contrib.auth import get_user_model
+from django.core.files import File
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
+
 from .models import InstaPost, Tag, Media, Story, Mention
+
+User = get_user_model()
 
 
 class TagSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=100)
+
     class Meta:
         model = Tag
         fields = ('name',)
@@ -40,15 +48,13 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CreatePostSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True, write_only=True)
-    user = serializers.SlugRelatedField('username', read_only=True)
-    media = MediaSerializer(many=True, write_only=True)
+    tags = serializers.SlugRelatedField('name',many=True, queryset=Tag.objects.all())
+    media = MediaSerializer(write_only=True, required=False)
 
     class Meta:
         model = InstaPost
         fields = (
             'caption',
-            'user',
             'tags',
             'media_choice',
             'media',

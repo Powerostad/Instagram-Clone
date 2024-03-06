@@ -10,7 +10,7 @@ from .serializers import LikeSerializer, CommentSerializer
 
 
 class LikePostAPIView(APIView):
-    def get(self, request, post_id):
+    def post(self, request, post_id):
         post = get_object_or_404(InstaPost, id=post_id)
         user = request.user
         # Like.objects.filter(user=user, content_type__model='instapost', object_id=post_id).delete()
@@ -36,4 +36,4 @@ class CommentCreateAPIView(CreateAPIView):
 class CommentDeleteAPIView(DestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsAuthenticated, ]

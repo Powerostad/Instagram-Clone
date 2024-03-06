@@ -56,9 +56,17 @@ class InstaPost(models.Model):
         return self.caption
 
 
+def user_directory_path_for_media(instance, filename):
+    if instance.post:
+        return f'user_{instance.post.id}/{filename}'
+    else:
+        # Return a default path or handle the case appropriately
+        return f'default_media/{filename}'
+
+
 class Media(models.Model):
     post = models.ForeignKey(InstaPost, on_delete=models.CASCADE, related_name='media')
-    media = models.FileField(upload_to=user_directory_path, verbose_name='Image or Video')
+    media = models.FileField(upload_to=user_directory_path_for_media, verbose_name='Image or Video')
 
     def save(self, *args, **kwargs):
         # Check if the post has reached the maximum allowed media count
